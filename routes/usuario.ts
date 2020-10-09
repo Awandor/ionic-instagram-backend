@@ -176,6 +176,45 @@ userRoutes.post('/edit', [verificaToken], (req: any, resp: Response) => {
 
 });
 
+// ========================================
+// Borrar un usuario
+// ========================================
+
+// Como segundo argumento van los middlewares como arreglo
+userRoutes.post('/delete', [verificaToken], (req: any, resp: Response) => {
+
+    // Tenemos req.usuario._id gracias al middleware verificaToken
+
+    // on la opción new: true recibimos en el callback los nuevos datos grabados en la base de datos y no los antiguos
+
+    Usuario.findByIdAndDelete(req.usuario._id, (err, userDB) => {
+
+        if (err) {
+
+            throw err;
+
+        }
+
+        if (!userDB) {
+
+            return resp.json({
+                ok: false,
+                mensaje: 'No existe un usuario con ese ID'
+            });
+
+        }
+
+        resp.json({
+            ok: true,
+            nombre: userDB.nombre,
+            mensaje: 'Usuario borrado'
+
+        });
+
+    });
+
+});
+
 // Para poder usarlo fuera de este archivo lo exportamos
 
 export default userRoutes;
