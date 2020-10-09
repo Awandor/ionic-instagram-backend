@@ -205,7 +205,7 @@ Creamos método `comprobarToken` que toma un token como argumento y comprueba y 
 
 Vamos a crear algo donde necesitemos verificar el token.
 
-Creamos una nueva ruta `editar` en `usuario.ts`
+Creamos una nueva ruta `edit` en `usuario.ts`
 
 Vamos a crear una función middleware y la centralizamos en carpeta middlewares y archivo `autenticacion.ts`
 
@@ -216,9 +216,16 @@ Ahora llamamos la función middleware `verificaToken` en `usuario.ts` en la ruta
 
 ## Actualizar un usuario de la base de datos
 
-Vamos a la ruta `editar` en `usuario.ts`
+Vamos a la ruta `edit` en `usuario.ts`
 
 Utilizamos el método `findByIdAndUpdate` de mongoose
+
+
+## Borrar un usuario de la base de datos
+
+Creamos una nueva ruta `delete` en `usuario.ts`
+
+Utilizamos el método `findByIdAndDelete` de mongoose
 
 
 
@@ -259,5 +266,5 @@ Crear un tag en Github y un Release
 
 > `git push --tags` > sube los tags al repositorio remoto
 
-En github vamos a Releases > Tags > Add release notes
+En github vamos a Tags > Add release notes
 

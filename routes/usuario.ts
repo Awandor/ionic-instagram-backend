@@ -215,6 +215,24 @@ userRoutes.post('/delete', [verificaToken], (req: any, resp: Response) => {
 
 });
 
+// ========================================
+// Obtener un usuario
+// ========================================
+
+// Como segundo argumento van los middlewares como arreglo
+userRoutes.get('/', [verificaToken], (req: any, resp: Response) => {
+
+    // Tenemos req.usuario gracias al middleware verificaToken
+
+    const usuario = req.usuario
+
+    resp.json({
+        ok: true,
+        usuario // usuario: usuario
+    });
+
+});
+
 // Para poder usarlo fuera de este archivo lo exportamos
 
 export default userRoutes;
