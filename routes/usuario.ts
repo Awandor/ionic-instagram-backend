@@ -216,7 +216,7 @@ userRoutes.post('/delete', [verificaToken], (req: any, resp: Response) => {
 });
 
 // ========================================
-// Obtener un usuario
+// Obtener datos del usuario por Token
 // ========================================
 
 // Como segundo argumento van los middlewares como arreglo
@@ -232,6 +232,7 @@ userRoutes.get('/', [verificaToken], (req: any, resp: Response) => {
     });
 
 });
+
 
 // Para poder usarlo fuera de este archivo lo exportamos
 

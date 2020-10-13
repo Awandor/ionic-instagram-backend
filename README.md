@@ -227,6 +227,146 @@ Creamos una nueva ruta `delete` en `usuario.ts`
 
 Utilizamos el método `findByIdAndDelete` de mongoose
 
+## Retornar información del usuario por Token
+
+Vamos a `usuario.ts` y añadimos un servicio de obtener información del usuario a partir del Token
+
+Nos va a venir bien para comprobar en el frontend si un usuario está loggeado y para implementar guards que protejen ciertas rutas
+
+
+# Mensajes
+
+## Creamos Modelo Mensaje para la base de datos
+
+Creamos carpeta models y dentro `mensaje-model.ts`
+
+Los modelos contienen los campos que voy a necesitar. Para ello importamos `Schema` y `model` de mongoose
+
+Con `Schema` definimos los campos con sus propiedades y con `model` le damos un nombre y le incorporamos el `Schema` y lo exportamos
+
+Podemos definir una interface que nos ayude con el tipado y creamos un Tipo para nuestro modelo de mensaje
+
+## Servicio para crear un Mensaje
+
+Creamos un nuevo archivo `mensaje.ts` en routes
+
+Vamos a `index.ts` y definimos la nueva ruta
+
+En `mensaje.ts` creamos la ruta `'/'` obtenemos el id del usuario y el body del front y grabamos en base de datos con `create`
+
+
+## Servicio para obtener los mensajes de forma paginada
+
+En `mensaje.ts` creamos una nueva ruta para obtener mensajes con GET y usamos el método `find`
+
+Ordenamos desc, Limitamos a 10, Añadimos los datos del usuario sin la contraseña.
+
+Para decidir si mostramos los primero diez o los siguientes, es decir aplicar la función de paginación usamos el método de mongoose `skip`
+
+
+## Servicio para subir archivos del front al backend
+
+Necesitamos trabajar con otro middleware `fileupload` lo importamos en `index.ts`
+
+Para que TS lo reconozca como Type > `npm install @types/express-fileupload --save-dev`
+
+Ahora lo configuarmos en `index.ts` usando `use`
+
+`fileupload` toma los archivos recibidos desde el front y los almacena en un lugar llamado `files`
+
+Ahora creamos un servicio para subir los archivos en `mensaje.ts`
+
+Probamos en Postman enviando el token y form-data tipo file
+
+Vamos a crear una interface del objeto file, creamos carpeta `interfaces` y dentro archivo `file-upload.ts` esta interface tendrá
+los datos que nos interesa. Ya tenemos nuestro tipo `FileUpload` que podemos importar en `mensaje.ts`
+
+Vamos a limitar la subida de archivos a que sean de tipo imagen
+
+Las imágenes son almacenadas en este punto en un directorio temporal
+
+
+## Tratamiento de las imágenes
+
+Cuando un usuario sube una imagen desde el front nos llega al backend el ID del usuario y su token.
+También nos llega una o varias imágenes. Queremos dar un nombre único a cada imagen.
+
+Crearemos una carpeta `uploads` dentro de ella cada usuario que suba una imagen se le creará si no la tiene creada ya una carpeta con
+el nombre del id del usuario. Dentro habrá otras dos carpetas, una `temp` donde se almacena temporalmente la imagen en espera de crear
+un Mensaje y otra `imagenes` con las imágenes definitivas usadas en los mensajes
+
+
+## Crear una clase para manejar FileSystem
+
+ Creamos la carpeta `uploads` en la parte TS del proyecto y también en `dist` el proyecto compilado de node
+
+ En `classes` creamos archivo nuevo `file-system.ts` y creamos las clase `FileSystem` que tiene el método `guardarImagenTemporal`
+
+ Para trabajar con el path importamos un paquete de Node `path` y para trabajar con carpetas y archivos hay otro paquete `fs` (file system)
+ de Node que hay que importar
+
+ Ahora vamos a `mensajes` y creamos una instancia de la clase `FileSystem` y llamamos al método `guardarImagenTemporal`
+
+ Al hacer una prueba en Postman vemos que se crea la carpeta del usuario en `dist/uploads`
+
+
+ ## Generar un nombre único de archivo
+
+ Necesitamos instalar un paquete de Node que genera id únicos > `npm install uniqid`
+
+ Para que TS lo reconozca como Type > `npm install @types/uniqid --save-dev`
+
+ Lo importamos en la clase `file-system.ts` y creamos el método `generarNombreUnico`
+
+ Ya podemos utilizarlo en el método `guardarImagenTemporal`
+
+
+## Mover archivo físico de zona Temp de node a carpeta temp
+
+El método `mv` nos lo entrega ... y permite mover archivos
+
+En la interface `file-upload.ts` añadimos el método sin definir `mv` para que no nos dé error
+
+En la clase `file-system.ts` implementamos el método `mv` en `guardarImagenTemporal`
+
+Lamentablemente el método `mv` no retorna promesa sino funciona con un callback
+
+Para evitar caer en el infierno de los callback vamos a forzar a que nos retorne una promesa
+
+Queremos asegurarnos de que el archivo ha sido movido antes de retornar un mensaje de éxito al usuario
+
+Probamos en Postman y vemos que el archivo ha sido movido a la carpeta `temp` de `dist/uploads`
+
+
+## Mover archivo de la carpeta temp a la carpeta images
+
+Vamos a `mensaje.ts` a la parte donde se crea el mensaje ahí queremos obtener un arreglo con los nombres de los
+archivos guardados en la carpeta `temp`
+
+Para ello vamos a crear en `file-system.ts` un método `moverArchivoTemp` que mueva los archivos de `temp` a `images` será un método
+público para que se pueda llamar desde fuera de la clase, como argumento toma userId para que se mueva todo el
+contenido de temp a images de ese userId
+
+Ahora llamamos al método `moverArchivoTemp` desde `mensaje.ts`
+
+Probamos en Postman creando un nuevo Mensaje con el token que hemos utilizado para subir imágenes.
+Las imágenes desaparecen de temp y son movidas a images, Postman nos retorna los nombres de las imágenes y en Robo T3
+vemos que han sido almacenadas en la base de datos de Mongo
+
+
+## Servicio para mostrar una imagen por URL
+
+Vamos a `mensaje.ts` y creamos un servicio para mostrar la imagen
+
+
+Creamos en `file-system.ts` el método público `getImagenUrl` que nos retorna el path de la imagen
+
+Si la imagen no existe queremos mostrar una imagen por defecto.
+
+Creamos una carpeta `assets` y en ella metemos una imagen por defecto. Como assets no tiene ningún archivo TS,
+el compilador la va a ignorar por lo que debemos de copiarla y pegarla en la carpeta `dist`
+
+
 
 
 
