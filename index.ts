@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import mensajeRoutes from './routes/mensaje';
 import fileUpload from 'express-fileupload';
+import cors from 'cors';
 
 const server = new Server();
 
@@ -23,6 +24,12 @@ server.app.use(bodyParser.json());
 
 // server.app.use(fileUpload({useTempFiles: true})); // Añadir el parámetro si no funciona
 server.app.use(fileUpload());
+
+// ========================================
+// Configurar CORS
+// ========================================
+
+server.app.use(cors({ origin: true, credentials: true }));
 
 
 // ========================================

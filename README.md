@@ -367,8 +367,14 @@ Creamos una carpeta `assets` y en ella metemos una imagen por defecto. Como asse
 el compilador la va a ignorar por lo que debemos de copiarla y pegarla en la carpeta `dist`
 
 
+## Resolver problema de peticiones CROSS DOMAIN (CORS)
 
+Hay muchas maneras de configurarlo, como aceptar peticiones de ciertos dominios
 
+Vamos a `index.ts` debajo de File Upload
+
+Ya tenemos instalado en el proyecto `cors`
+Para que TS lo reconozca como Type > `npm install @types/cors --save-dev`
 
 
 # GIT

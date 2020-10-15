@@ -89,6 +89,7 @@ userRoutes.post('/create', (req: Request, resp: Response) => {
     const user = {
         nombre: req.body.nombre,
         email: req.body.email,
+        avatar: req.body.avatar,
         password: encryptedPassword
     }
 
