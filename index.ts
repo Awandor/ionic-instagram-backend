@@ -29,6 +29,8 @@ server.app.use(fileUpload());
 // Configurar CORS
 // ========================================
 
+// Esta es la configuración para aceptar conexiones desde otros dominios / origenes
+
 server.app.use(cors({ origin: true, credentials: true }));
 
 
@@ -45,7 +47,8 @@ server.app.use('/messages', mensajeRoutes);
 // ========================================
 
 // connect recibe la bbdd, parámetros y un callback
-mongoose.connect('mongodb://localhost:27017/instagram', { useNewUrlParser: true, useCreateIndex: true }, (err) => {
+// mongoose.connect('mongodb://localhost:27017/instagram', { useNewUrlParser: true, useCreateIndex: true }, (err) => {
+mongoose.connect('mongodb+srv://awandorDbUser:NpOTKXCtKVatgj2f@cluster0.njuvn.mongodb.net/instagram?retryWrites=true&w=majority', { useNewUrlParser: true, useCreateIndex: true }, (err) => {
 
     if (err) {
 

@@ -98,9 +98,9 @@ Esto crea la carpeta `node_modules` con todas las dependencias y actualiza `pack
 
 ## Creación de una instancia del servidor express
 
-Creamos carpeta `classes` donde vamos acolocar todas las clases necesarias para nuestro proyecto
+Creamos carpeta `classes` donde vamos a colocar todas las clases necesarias para nuestro proyecto
 
-Creamos dentro el archivo `server.ts` y creamos una clase común de js y la exportamos
+Creamos dentro el archivo `server.ts` y creamos una clase normal de js y la exportamos
 
 Instalamos `@types/express` que es una dependencia de desarrollo que nos ayuda con el tipado de express
 > `npm install @types/express --save-dev`
@@ -375,6 +375,50 @@ Vamos a `index.ts` debajo de File Upload
 
 Ya tenemos instalado en el proyecto `cors`
 Para que TS lo reconozca como Type > `npm install @types/cors --save-dev`
+
+
+## Crear una base de datos Mongo en el Cloud de Mongo
+
+Vamos a `mongodb.com`, creamos una cuenta de usuario, un nombre de organización, un primer proyecto
+
+Creamos un `Cluster de tipo Free`, elegimos el `Cloud Provider y la región` y en la parte de abajo > `Create Cluster`, tarda unos minutos
+
+Vamos a `Connect` > Escogemos la `IP` que tendrá acceso a la base de datos, se puede dejar de libre acceso
+
+Creamos un usuario de base de datos y una contraseña
+
+`Choose connection method` > `Connect your application`
+
+Copiamos la ruta a la base de datos, en esta ruta cambiamos el usuario por el nuestro y ponemos el nombre de la base de datos
+que queramos, no puede tener espacios en blanco y se genera al vuelo la primera vez que nos conectamos a la bbdd
+
+La pegamos en `index.ts` en `mongoose.connect` con los parámetros que usabamos en local
+
+
+## Desplegar backend a servidor Hereku
+
+1. Crear cuenta en Hereku
+2. Crear aplicación
+3. Desplegar usando Hereku Git
+4. Instalar Hereku CLI, instalar EXE y reiniciar PC, cuidado de no tener el móvil conectado por USB
+
+Comprobar que Hereku está instalado > `hereku --version`
+
+5. Login en Hereku: `heroku login`
+6. Vincular repositorio GIT al proyecto Hereku > `heroku git:remote -a awandor-instagram-app`
+7. Subir repositorio GIT a Hereku > `git push heroku master`
+
+En settings puedo ver la url > `https://awandor-instagram-app.herokuapp.com/`
+
+La app no funciona aun, Heroku no sabe copmo inicializarla, tenemos que crear un Procfile que le da instrucciones a Heroku de
+como iniciar la app, queremos que lo haga de la misma manera en que lo hacemos de forma local
+
+Creamos archivo `Procfile` sin extensión que tiene esta línea: `web: node index.js`
+
+Ahora tenemos que cambiar el puerto que escucha a uno que nos proporciona Heroku mediante la variable `process.env.PORT` en `server.ts`
+y si no está disponible la variable como cuando estamos corriendo en local, que utilice el puerto original `3000`
+
+Añadimos los cambios al repositorio local de Git, hacemos el commit y el push a `Heroku`
 
 
 # GIT
