@@ -395,14 +395,14 @@ que queramos, no puede tener espacios en blanco y se genera al vuelo la primera 
 La pegamos en `index.ts` en `mongoose.connect` con los parámetros que usabamos en local
 
 
-## Desplegar backend a servidor Hereku
+## Desplegar backend a servidor Heroku
 
-1. Crear cuenta en Hereku
-2. Crear aplicación
+1. Crear cuenta en Heroku
+2. Crear aplicación `awandor-instagram-app`
 3. Desplegar usando Hereku Git
 4. Instalar Hereku CLI, instalar EXE y reiniciar PC, cuidado de no tener el móvil conectado por USB
 
-Comprobar que Hereku está instalado > `hereku --version`
+Comprobar que Hereku está instalado > `heroku --version`
 
 5. Login en Hereku: `heroku login`
 6. Vincular repositorio GIT al proyecto Hereku > `heroku git:remote -a awandor-instagram-app`
@@ -419,6 +419,50 @@ Ahora tenemos que cambiar el puerto que escucha a uno que nos proporciona Heroku
 y si no está disponible la variable como cuando estamos corriendo en local, que utilice el puerto original `3000`
 
 Añadimos los cambios al repositorio local de Git, hacemos el commit y el push a `Heroku`
+
+Para ver los archivos subidos a Heroku podemos usar la consola de Heroku
+
+> `heroku run bash`
+
+Una vez inicializada podemos hacer `dir, cd`
+
+PROBLEMA: Heroku borra todos los archivos generados de forma dinámica al cabo de un tiempo corto y deja la app tal y como
+estaba en el último push que se hizo. No nos sirve para esta app pues desaparecen las imágenes
+
+
+## Desplegar backend a servidor AWS
+
+Vamos a Services > Developer Tools > Pipelines > Create Pipeline > Pipeline settings > ponemos un nombre `instagram`
+
+Dejamos New service role > Next > Add source stage > GitHub (Version 2)
+
+Vamos a Create New Application
+
+Conect to GitHub > ponemos un nombre de conexión > install a new app > enlazamos con un repositorio de github > Connect
+
+Escogemos el repositorio y la rama y marcamos CodePipeline default > Next
+
+Add build stage > Skip build stage
+
+Add deploy stage > AWS Elastic Beanstalk
+
+Region > Paris
+
+Ahora en otra pestaña vamos a Creamos cuenta en AWS, vamos a Services > Compute > AWS Elastic Beanstalk
+
+Platform > Node js
+
+Creamos la app > nombre > `instagram-backend-app`
+Creamos el Environment > nombre > `InstagramBackendApp-env`
+
+Volvemos a la pestaña con Add deploy stage > 
+
+Application name > pegamos `instagram-backend-app`
+Environment name > pegamos `InstagramBackendApp-env`
+
+Next > Revisamos los datos > Create pipeline
+
+Va a tratar de hacer el Deploy pero falla, conecta con github pero falla al conectar con el AWS environment
 
 
 # GIT
